@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}Car Price{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <a href="/" title="Click to reset form">
+            <img src="../../static/car-giant-logo.svg" class="my-4" />
+        </a>
+
+        {% if result == True %}
+
+            {% include "partials/__result.html" %}
+
+        {% endif %}
+
+        {% include "partials/__form.html" %}
+    </div>
+</div>
+
+{% endblock %}
