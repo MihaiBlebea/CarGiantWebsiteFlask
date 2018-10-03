@@ -9,3 +9,9 @@ class CarForm(Form):
     euro = SelectField('Standard Euro Emissions')
     transmission = SelectField('Transmission')
     submit = SubmitField('Get estimated price')
+
+
+class SettingForm(Form):
+
+    pages = StringField('How many pages to scrape (27 cars per page)')
+    submit = SubmitField('Scrape and train model')
