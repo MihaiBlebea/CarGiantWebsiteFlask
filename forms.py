@@ -3,9 +3,9 @@ from wtforms import Form, StringField, SelectField, SubmitField
 
 class CarForm(Form):
 
-    brand = SelectField('Select car model')
-    body = SelectField('Select body type')
-    engine = StringField('Engine size')
-    fuel = SelectField('Select fuel type', choices=[('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')])
-    acceleration = StringField('Acceleration')
+    mpg = StringField('Mpg')
+    fuel = SelectField('Select fuel type')
+    mileage = StringField('Mileage')
+    euro = SelectField('Standard Euro Emissions')
+    transmission = SelectField('Transmission')
     submit = SubmitField('Get estimated price')

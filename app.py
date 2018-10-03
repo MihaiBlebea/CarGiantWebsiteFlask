@@ -1,55 +1,66 @@
 from flask import Flask, request, render_template
 from forms import CarForm
-from cg_predict_price import CGData, CGPredict, CGEncode
 import pandas as pd
 from pandas import DataFrame
 
+from model import get_column_uniq_variants, get_data, process_data, get_model, predict_result, train_encoder, encode_labels
+
+
 app = Flask(__name__)
+
+
+def parse_input_select_data(data_path, column_name):
+    uniq_data = get_column_uniq_variants(data_path, column_name)
+    result = [('', 'Please select an option')]
+    for option in uniq_data:
+        result.append((option, option))
+    return result
 
 
 @app.route('/', methods = ['GET', 'POST'])
 def homepage():
     form = CarForm()
 
-    form.brand.choices = [('Fiat Panda', 'Fiat Panda'), ('Smart Fortwo', 'Smart Fortwo'), ('Ford Ka', 'Ford Ka')]
-    form.body.choices = [('Hatchback', 'Hatchback'), ('Coupe', 'Coupe'), ('Cabriolet', 'Cabriolet')]
-    form.fuel.choices = [('Petrol', 'Petrol')]
+    form.fuel.choices = parse_input_select_data('data/excel_data.xlsx', 'Fuel')
+    form.euro.choices = parse_input_select_data('data/excel_data.xlsx', 'Standard Euro Emissions')
+    form.transmission.choices = parse_input_select_data('data/excel_data.xlsx', 'Transmission')
+
 
     if request.method == 'POST':
 
-        brand = request.form['brand']
-        body = request.form['body']
-        engine = request.form['engine']
+        mpg = request.form['mpg']
         fuel = request.form['fuel']
-        acceleration = request.form['acceleration']
+        mileage = request.form['mileage']
+        euro = request.form['euro']
+        transmission = request.form['transmission']
 
-        df = pd.DataFrame({
-            "Body Type": [body],
-            "Engine size": [engine],
-            "0 to 62 mph (secs)": [acceleration],
-            "Fuel": [fuel],
-            "Car": [brand]
+        if fuel == '' or euro == '' or transmission == '':
+            return render_template('pages/landing.html', form = form, result = False, field_error = True)
+
+        df_input = pd.DataFrame({
+            'EC Combined (mpg)': [mpg],
+            'Fuel': [fuel],
+            'Mileage': [mileage],
+            'Standard Euro Emissions': [euro],
+            'Transmission': [transmission]
         })
 
-        cg_encode = CGEncode('data/encode_dict.json')
-        labels = ['Body Type', 'Engine size', 'Fuel', '0 to 62 mph (secs)', 'Car']
+        feature_columns = ['EC Combined (mpg)', 'Fuel', 'Mileage', 'Standard Euro Emissions', 'Transmission']
+        label_column = 'Price'
 
-        df = cg_encode.encode_to_integer(df, labels)
+        data = get_data('https://www.cargiant.co.uk/search', 2, 'data/excel_data.xlsx')
+        df_features, df_labels = process_data(data, feature_columns, label_column)
 
-        cg_data = CGData('https://www.cargiant.co.uk/search', labels, 'Price', cg_encode, max_pages = 4)
-        cg_data.load_or_scrape_data('data/car_data.xlsx')
-        df_features = cg_data.get_features()
-        df_labels = cg_data.get_labels()
+        encoder = train_encoder(df_features)
+        df_features = encode_labels(df_features, encoder)
+        encoded_input = encode_labels(df_input, encoder)
 
-        cg_predict = CGPredict(df_features, df_labels)
-        cg_predict.train_or_load('data/car_price.model')
-        prediction = cg_predict.predict(df)
+        model = get_model('data/predict_price.model', df_features, df_labels)
 
-        score = cg_predict.get_score()
+        prediction = predict_result(model, encoded_input)
+        print(prediction)
 
-        brand = request.form['brand']
-
-        return render_template('pages/landing.html', form = form, result = True, score = score, price = prediction[0], brand = brand)
+        return render_template('pages/landing.html', form = form, result = True, price = prediction[0])
     else:
         return render_template('pages/landing.html', form = form)
 

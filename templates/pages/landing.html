@@ -18,6 +18,14 @@
 
         {% endif %}
 
+
+        {% if field_error == True %}
+
+            {% include "partials/__error.html" %}
+
+        {% endif %}
+
+
         {% include "partials/__form.html" %}
     </div>
 </div>
