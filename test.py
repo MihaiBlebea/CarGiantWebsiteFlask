@@ -25,13 +25,13 @@ label_column = 'Price'
 
 
 scraper = ScraperFacade('https://www.cargiant.co.uk', 2)
-# data = scraper.get_formated_data()
-# print(data)
 
 excel = Excel('data/excel_data.xlsx')
-# excel.save(data)
-# data = excel.load()
-data = excel.get_if_exists(scraper.get_formated_data())
+
+# Check if file that holds the data is present,
+# if not scrape the website again,
+# if it exists then save the scraped data to file
+data = excel.get_if_exists(scraper.get_formated_data)
 
 process_data = ProcessData(data, feature_columns, label_column)
 data = process_data.remove_missing()
