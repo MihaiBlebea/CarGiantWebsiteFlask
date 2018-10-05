@@ -52,8 +52,8 @@ class DataFormater:
 
 
 # How to implement Data Formater
-data_formater = DataFormater(data)
-data_formater.add( RemoveMoneySign() )
-data_formater.add( RemoveAsterix() )
-data_formater.add( RemoveComma() )
-data = data_formater.run()
+# data_formater = DataFormater(data)
+# data_formater.add( RemoveMoneySign() )
+# data_formater.add( RemoveAsterix() )
+# data_formater.add( RemoveComma() )
+# data = data_formater.run()

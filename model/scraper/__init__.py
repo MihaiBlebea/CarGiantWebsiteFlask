@@ -1,1 +1,1 @@
-from scraper.ScraperFacade import ScraperFacade
+from model.scraper.ScraperFacade import ScraperFacade

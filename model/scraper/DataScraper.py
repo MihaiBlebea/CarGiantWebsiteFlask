@@ -12,8 +12,8 @@ class DataScraper:
     def get_data(self):
         data = []
 
-        for i in range(1, self.max_pages):
-            url = self.__get_next_url(root_url, i)
+        for i in range(1, self.max_page_number):
+            url = self.__get_next_url(i)
             data = data + self.__scrape_url(url)
 
         return DataFrame(data)
@@ -41,7 +41,8 @@ class DataScraper:
 
             trs = browser.get_current_page().find_all('tr')
             car_details = browser.get_current_page().find('div', class_='car__main-details')
-            car_price, car_details = self.__get_car_details(car_details)
+            print(complete_url)
+            car_name, car_price = self.__get_car_details(car_details)
 
             dict = {}
             dict['Car'] = car_name
@@ -62,9 +63,9 @@ class DataScraper:
 
         return car_array
 
-    
-    def __get_next_url(self):
-        return self.root_url + '/page/' + str(self.page_cout)
+
+    def __get_next_url(self, page_cout):
+        return self.root_url + '/search/page/' + str(page_cout)
 
 
     def __get_car_details(self, car_details):
