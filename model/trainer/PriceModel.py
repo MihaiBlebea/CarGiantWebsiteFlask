@@ -2,6 +2,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.model_selection import train_test_split
 from pandas import Series
 import numpy as np
+from sklearn.metrics import r2_score
 
 
 class PriceModel:
@@ -28,6 +29,14 @@ class LinearRegressionModel(PriceModel):
         self.model = linear_r.fit(self.x_train, self.y_train)
         return self.model
 
+
+    def get_score(self):
+        return self.model.score(self.x_test, self.y_test)
+
+
+    def get_r2_score(self):
+        y_pred = self.predict(self.x_test, self.model)
+        return r2_score(self.y_test, y_pred)
 
     def predict(self, x_predict, model = None):
         if model is None:

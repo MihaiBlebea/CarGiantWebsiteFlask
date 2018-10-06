@@ -46,4 +46,6 @@ class CreateModelFacade:
         model = lr_model.train_model()
         predict_model_object.save(model)
 
+        print('Score is ' + str(lr_model.get_score()))
+        print('R2 Score is ' + str(lr_model.get_r2_score()))
         return model
