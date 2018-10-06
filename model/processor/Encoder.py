@@ -45,7 +45,6 @@ class EncodeLabel(Encoder):
         string_columns = self.get_string_columns(data)
         encoder = LabelEncoder()
         for column in string_columns:
-            print(data[column])
             encoder.fit_transform(data[column])
         return encoder
 

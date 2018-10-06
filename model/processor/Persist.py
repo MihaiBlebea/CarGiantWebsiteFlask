@@ -15,7 +15,6 @@ class Persist:
         pass
 
     def get_if_exists(self, callback):
-        print('RUN FUNCTION "get if exists"')
         file = Path(self.path)
         if file.exists():
             data = self.load()

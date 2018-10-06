@@ -1,3 +1,4 @@
+from pandas import DataFrame
 
 
 class Format:
@@ -9,27 +10,30 @@ class Format:
 class RemoveMoneySign(Format):
 
     def execute(self, data):
-        for column in data:
-            if '£' in data[column]:
-                data[column] = data[column].replace('£', '')
+        for row in data:
+            for column in row:
+                if '£' in row[column]:
+                    row[column] = row[column].replace('£', '')
         return data
 
 
 class RemoveAsterix(Format):
 
     def execute(self, data):
-        for column in data:
-            if '*' in data[column]:
-                data[column] = data[column].replace('*', '').strip()
+        for row in data:
+            for column in row:
+                if '*' in row[column]:
+                    row[column] = row[column].replace('*', '').strip()
         return data
 
 
 class RemoveComma(Format):
 
     def execute(self, data):
-        for column in data:
-            if ',' in data[column]:
-                data[column] = data[column].replace(',', '')
+        for row in data:
+            for column in row:
+                if ',' in row[column]:
+                    row[column] = row[column].replace(',', '')
         return data
 
 
@@ -47,8 +51,7 @@ class DataFormater:
     def run(self):
         for format in self.formats:
             self.data = format.execute(self.data)
-
-        return self.data
+        return DataFrame(self.data)
 
 
 # How to implement Data Formater

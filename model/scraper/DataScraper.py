@@ -16,7 +16,7 @@ class DataScraper:
             url = self.__get_next_url(i)
             data = data + self.__scrape_url(url)
 
-        return DataFrame(data)
+        return data
 
 
     def __scrape_url(self, url):
