@@ -7,19 +7,29 @@
         body {
             background-color: #eaeaea;
             background-repeat: no-repeat;
-            background-image: url(../static/background-cars.jpg);
+            background-image: url(../static/background.jpg);
             background-size: cover;
-            background-blend-mode: luminosity;
+            background-attachment: fixed;
         }
 
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="row justify-content-center mt-5">
+        <div class="row justify-content-center my-5">
             <div class="col-md-6">
 
-                {% block content %}{% endblock %}
+                <div class="card">
+                    <div class="card-body">
+                        <a href="/" title="Click to reset form">
+                            <img src="../../static/car-giant-logo.svg" class="my-4" />
+                        </a>
+
+                        {% include "partials/__navigation.html" %}
+
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
 
             </div>
         </div>

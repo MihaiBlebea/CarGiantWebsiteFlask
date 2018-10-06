@@ -6,27 +6,19 @@
 
 {% block content %}
 
-<div class="card">
-    <div class="card-body">
-        <a href="/" title="Click to reset form">
-            <img src="../../static/car-giant-logo.svg" class="my-4" />
-        </a>
+{% if result == True %}
 
-        {% if result == True %}
+    {% include "partials/__result.html" %}
 
-            {% include "partials/__result.html" %}
-
-        {% endif %}
+{% endif %}
 
 
-        {% if field_error == True %}
+{% if field_error == True %}
 
-            {% include "partials/__error.html" %}
+    {% include "partials/__error.html" %}
 
-        {% endif %}
+{% endif %}
 
-        {% include "partials/__prediction_form.html" %}
-    </div>
-</div>
+{% include "partials/__prediction_form.html" %}
 
 {% endblock %}
